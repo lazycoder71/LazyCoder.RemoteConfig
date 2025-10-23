@@ -1,0 +1,26 @@
+{
+  "name": "lazycoder.unity.remoteconfig",
+  "displayName": "LazyCoder Remote Config",
+  "version": "1.0.0",
+  "unity": "6000.1",
+  "description": "Remote config solution for Unity using Firebase.",
+  "keywords": [
+    "remote",
+	"config",
+    "unity"
+  ],
+  "bugs": {
+    "url": "https://github.com/lazycoder71/LazyCoder.RemoteConfig/issues",
+    "email": "lamnd.bounce@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lazycoder71/LazyCoder.RemoteConfig.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Lam Nguyen",
+    "email": "lamnd.bounce@gmail.com",
+    "url": "https://www.facebook.com/theycallmelam"
+  }
+}
