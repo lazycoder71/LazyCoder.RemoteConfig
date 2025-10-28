@@ -1,7 +1,10 @@
 using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
+
+#if LAZYCODER_FIREBASE_REMOTECONFIG
 using Firebase.RemoteConfig;
+#endif
 
 namespace LazyCoder.RemoteConfig
 {
@@ -12,89 +15,109 @@ namespace LazyCoder.RemoteConfig
 
         [SerializeField] private RemoteConfigDataType _type;
 
-        [ShowIf("@Type == RemoteConfigDataType.String")]
+        [ShowIf("@_type == RemoteConfigDataType.String")]
         [SerializeField] private string _defaultValueString;
 
-        [ShowIf("@Type == RemoteConfigDataType.String")]
+        [ShowIf("@_type == RemoteConfigDataType.String")]
         [ReadOnly]
-        [ShowInInspector] private string _remoteValueString;
+        [ShowInInspector] private string _currentValueString;
 
-        [ShowIf("@Type == RemoteConfigDataType.Boolean")]
+        [ShowIf("@_type == RemoteConfigDataType.Boolean")]
         [SerializeField] private bool _defaultValueBool;
 
-        [ShowIf("@Type == RemoteConfigDataType.Boolean")]
+        [ShowIf("@_type == RemoteConfigDataType.Boolean")]
         [ReadOnly]
-        [ShowInInspector] private bool _remoteValueBool;
+        [ShowInInspector] private bool _currentValueBool;
 
-        [ShowIf("@Type == RemoteConfigDataType.Int")]
+        [ShowIf("@_type == RemoteConfigDataType.Int")]
         [SerializeField] private int _defaultValueInt;
 
-        [ShowIf("@Type == RemoteConfigDataType.Int")]
+        [ShowIf("@_type == RemoteConfigDataType.Int")]
         [ReadOnly]
-        [ShowInInspector] private int _remoteValueInt;
+        [ShowInInspector] private int _currentValueInt;
+
+        [ShowIf("@_type == RemoteConfigDataType.Float")]
+        [SerializeField] private float _defaultValueFloat;
+
+        [ShowIf("@_type == RemoteConfigDataType.Float")]
+        [ReadOnly]
+        [ShowInInspector] private float _currentValueFloat;
 
         public string Key => _key;
-        
-        public string DefaultValueString => _defaultValueString;
 
-        public bool DefaultValueBool => _defaultValueBool;
-        
-        public int DefaultValueInt => _defaultValueInt;
+        public string CurrentValueString => _currentValueString;
+
+        public bool CurrentValueBool => _currentValueBool;
+
+        public int CurrentValueInt => _currentValueInt;
+
+        public float CurrentValueFloat => _currentValueFloat;
 
         public RemoteConfigDataType Type => _type;
 
         private string PlayerPrefsKey => $"{nameof(LazyCoder.RemoteConfig)}_{_key}";
 
-        public void SetupDataDefault()
+        public void Load()
         {
             switch (_type)
             {
                 case RemoteConfigDataType.String:
-                    PlayerPrefs.SetString(PlayerPrefsKey, _defaultValueString);
+                    _currentValueString = PlayerPrefs.GetString(PlayerPrefsKey, _defaultValueString);
                     break;
 
                 case RemoteConfigDataType.Boolean:
-                    PlayerPrefs.SetInt(PlayerPrefsKey, _defaultValueBool ? 1 : 0);
+                    _currentValueBool = PlayerPrefs.GetInt(PlayerPrefsKey, _defaultValueBool ? 1 : 0) > 0;
                     break;
 
                 case RemoteConfigDataType.Int:
-                    PlayerPrefs.SetInt(PlayerPrefsKey, _defaultValueInt);
+                    _currentValueInt = PlayerPrefs.GetInt(PlayerPrefsKey, _defaultValueInt);
+                    break;
+
+                case RemoteConfigDataType.Float:
+                    _currentValueFloat = PlayerPrefs.GetFloat(PlayerPrefsKey, _defaultValueFloat);
                     break;
             }
         }
 
-        public void SetupData(ConfigValue result)
+#if LAZYCODER_FIREBASE_REMOTECONFIG
+        public void FetchData(ConfigValue result)
         {
+            if (result.Source != ValueSource.RemoteValue)
+                return;
+
             switch (_type)
             {
                 case RemoteConfigDataType.String:
-                    if (result.Source == ValueSource.RemoteValue)
-                        PlayerPrefs.SetString(PlayerPrefsKey, result.StringValue);
-
-                    _remoteValueString = PlayerPrefs.GetString(PlayerPrefsKey);
+                    PlayerPrefs.SetString(PlayerPrefsKey, result.StringValue);
                     break;
 
                 case RemoteConfigDataType.Boolean:
-                    if (result.Source == ValueSource.RemoteValue)
-                        PlayerPrefs.SetInt(PlayerPrefsKey, result.BooleanValue ? 1 : 0);
-
-                    _remoteValueBool = PlayerPrefs.GetInt(PlayerPrefsKey) > 0;
+                    PlayerPrefs.SetInt(PlayerPrefsKey, result.BooleanValue ? 1 : 0);
                     break;
 
                 case RemoteConfigDataType.Int:
-                    if (result.Source == ValueSource.RemoteValue)
-                        PlayerPrefs.SetInt(PlayerPrefsKey, int.Parse(result.StringValue));
+                    int.TryParse(result.StringValue, out int intValue);
 
-                    _remoteValueInt = PlayerPrefs.GetInt(PlayerPrefsKey);
+                    PlayerPrefs.SetInt(PlayerPrefsKey, intValue);
+                    break;
+
+                case RemoteConfigDataType.Float:
+                    float.TryParse(result.StringValue, out float floatValue);
+
+                    PlayerPrefs.SetFloat(PlayerPrefsKey, floatValue);
                     break;
             }
+
+            Load();
         }
     }
+#endif
 
     public enum RemoteConfigDataType
     {
         String,
         Boolean,
-        Int
+        Int,
+        Float,
     }
 }

@@ -2,7 +2,9 @@
     "name": "LazyCoder.RemoteConfig",
     "rootNamespace": "LazyCoder.RemoteConfig",
     "references": [
-        "LazyCoder.SO"
+        "LazyCoder.SO",
+        "LazyCoder.Core",
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -11,6 +13,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.google.firebase.remote-config",
+            "expression": "",
+            "define": "LAZYCODER_FIREBASE_REMOTECONFIG"
+        }
+    ],
     "noEngineReferences": false
 }
