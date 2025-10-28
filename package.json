@@ -6,7 +6,7 @@
   "description": "Remote config solution for Unity using Firebase.",
   "keywords": [
     "remote",
-	"config",
+    "config",
     "unity"
   ],
   "bugs": {
@@ -22,5 +22,8 @@
     "name": "Lam Nguyen",
     "email": "lamnd.bounce@gmail.com",
     "url": "https://www.facebook.com/theycallmelam"
+  },
+  "dependencies": {
+    "lazycoder.unity.core": "1.1.2"
   }
 }
