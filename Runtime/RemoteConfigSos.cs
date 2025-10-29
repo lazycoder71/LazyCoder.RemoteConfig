@@ -21,9 +21,15 @@ namespace LazyCoder.RemoteConfig
                 remoteConfigData.Load();
             }
 
+            FetchData();
+        }
+
+        [Button]
+        private static void FetchData()
+        {
 #if LAZYCODER_FIREBASE_REMOTECONFIG
-            RemoteConfigService.FetchData().Forget();
-#endif
+            RemoteConfigService.FetchData();
+#endif      
         }
 
 #if UNITY_EDITOR

@@ -24,6 +24,8 @@
     "url": "https://www.facebook.com/theycallmelam"
   },
   "dependencies": {
-    "lazycoder.unity.core": "1.1.2"
+    "lazycoder.unity.core": "1.1.2",
+    "lazycoder.unity.so": "1.0.1",
+    "com.google.firebase.remote-config": "13.3.0"
   }
 }

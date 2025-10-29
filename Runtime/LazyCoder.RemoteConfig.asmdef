@@ -3,8 +3,7 @@
     "rootNamespace": "LazyCoder.RemoteConfig",
     "references": [
         "LazyCoder.SO",
-        "LazyCoder.Core",
-        "UniTask"
+        "LazyCoder.Core"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
